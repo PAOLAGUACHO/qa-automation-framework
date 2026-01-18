@@ -1,7 +1,5 @@
 package com.paola.pojo;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.List;
 
 public class ProductRequest {

@@ -5,16 +5,12 @@ import com.paola.utilities.ApiBaseTest;
 import com.paola.utilities.TestDataFactory;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PostUserTest extends ApiBaseTest {
 
@@ -32,13 +28,10 @@ public class PostUserTest extends ApiBaseTest {
                 .post("/products/")
                 .then().log().ifValidationFails()
                 .statusCode(201)
-                .and()
-                .body("title", is(product.getTitle()))
-                .body("price", is(product.getPrice()))
-                .body("description", is(product.getDescription()))
-                .body("category.id", is(product.getCategoryId()))
-                .body("images", is(product.getImages()))
                 .extract().jsonPath(); // Chaining
+
+        assertProductMatchesRequest(jsonPath,product);
+
 
         int id = jsonPath.getInt("id");
 
@@ -53,5 +46,12 @@ public class PostUserTest extends ApiBaseTest {
 
     }
 
+    private void assertProductMatchesRequest(JsonPath jsonPath, ProductRequest req) {
+        assertEquals(req.getTitle(), jsonPath.getString("title"));
+        assertEquals(req.getPrice(), jsonPath.getInt("price"));
+        assertEquals(req.getDescription(), jsonPath.getString("description"));
+        assertEquals(req.getCategoryId(), jsonPath.getInt("category.id"));
+        assertEquals(req.getImages(), jsonPath.getList("images"));
+    }
 
 }
