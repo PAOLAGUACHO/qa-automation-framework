@@ -4,7 +4,6 @@ import java.util.List;
 
 public class ProductRequest {
 
-    // Deserialization Process
 
     private String title;
     private Integer price;

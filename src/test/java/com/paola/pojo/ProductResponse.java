@@ -4,8 +4,6 @@ import java.util.List;
 
 public class ProductResponse {
 
-    // Serialization Process for reading Json response
-
     private Integer id;
     private String title;
     private Integer price;

@@ -3,6 +3,7 @@ package com.paola.tests.api;
 import com.paola.pojo.ProductRequest;
 import com.paola.utilities.ApiBaseTest;
 import com.paola.utilities.TestDataFactory;
+import com.paola.utilities.assertions.ProductAssertions;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import org.junit.jupiter.api.DisplayName;
@@ -12,12 +13,13 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import static com.paola.utilities.assertions.ProductAssertions.assertProductMatchesRequest;
+
 public class PostUserTest extends ApiBaseTest {
 
-    @DisplayName("Validating one business flow")
+    @DisplayName("Validating one Product flow")
     @Test
     public void newUser() {
-
 
         ProductRequest product = TestDataFactory.randomProduct();
 
@@ -30,10 +32,11 @@ public class PostUserTest extends ApiBaseTest {
                 .statusCode(201)
                 .extract().jsonPath(); // Chaining
 
-        assertProductMatchesRequest(jsonPath, product);
+        ProductAssertions.assertProductMatchesRequest(jsonPath, product);
 
 
         int id = jsonPath.getInt("id");
+        System.out.println(id);
 
         JsonPath responseJson = given()
                 .contentType(ContentType.JSON)
@@ -44,7 +47,7 @@ public class PostUserTest extends ApiBaseTest {
                 .statusCode(200)
                 .extract().jsonPath();
 
-        assertIdMatches(id,responseJson);
+        ProductAssertions.assertIdMatches(id,responseJson);
 
     }
 
@@ -93,19 +96,5 @@ public class PostUserTest extends ApiBaseTest {
                 .log().ifValidationFails()
                 .statusCode(not(201));
     }
-
-    private void assertProductMatchesRequest(JsonPath jsonPath, ProductRequest req) {
-        assertEquals(req.getTitle(), jsonPath.getString("title"));
-        assertEquals(req.getPrice(), jsonPath.getInt("price"));
-        assertEquals(req.getDescription(), jsonPath.getString("description"));
-        assertEquals(req.getCategoryId(), jsonPath.getInt("category.id"));
-        assertEquals(req.getImages(), jsonPath.getList("images"));
-    }
-
-    private void assertIdMatches(int expectedId,JsonPath json) {
-        assertEquals(expectedId, json.getInt("id"));
-    }
-
-
 
 }

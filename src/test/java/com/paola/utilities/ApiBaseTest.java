@@ -8,7 +8,7 @@ public class ApiBaseTest {
    // Centralized Configuration
 
     @BeforeAll
-    public static void setUp(){
+    public static void URI_Set_Up(){
       baseURI = "https://api.escuelajs.co/api/v1";
     }
 }
