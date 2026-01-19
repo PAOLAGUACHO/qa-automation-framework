@@ -30,20 +30,68 @@ public class PostUserTest extends ApiBaseTest {
                 .statusCode(201)
                 .extract().jsonPath(); // Chaining
 
-        assertProductMatchesRequest(jsonPath,product);
+        assertProductMatchesRequest(jsonPath, product);
 
 
         int id = jsonPath.getInt("id");
 
-        given()
+        JsonPath responseJson = given()
                 .contentType(ContentType.JSON)
                 .pathParam("id", id)
                 .when()
                 .get("/products/{id}")
                 .then()
                 .statusCode(200)
-                .body("id", is(id));
+                .extract().jsonPath();
 
+        assertIdMatches(id,responseJson);
+
+    }
+
+    @DisplayName("Validate product without title should Fail")
+    @Test
+    public void createProductWithoutTitle_shouldFail(){
+
+        String body = "{\n" +
+                "  \"title\": \"\",\n" +
+                "  \"price\": 10,\n" +
+                "  \"description\": \"A description\",\n" +
+                "  \"categoryId\": 1,\n" +
+                "  \"images\": [\"https://placehold.co/600x400\"]\n" +
+                "}";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(body)
+                .when()
+                .post("/products/")
+                .then()
+                .statusCode(not(201))
+                .body("message",notNullValue());
+    }
+
+    @DisplayName("Validate product with negative price should Fail")
+    @Test
+    public void createProductWithNegativePrice_shouldFail(){
+
+        String body = "{\n" +
+                "  \n" +
+                "  \"title\": \"Negative Shirt\",\n" +
+                "  \"price\": -5,\n" +
+                "  \"description\": \"A description\",\n" +
+                "  \"categoryId\": 1,\n" +
+                "  \"images\": [\"https://placehold.co/600x400\"]\n" +
+                "\n" +
+                "}";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(body)
+                .when()
+                .post("/products/")
+                .then()
+                .log().ifValidationFails()
+                .statusCode(not(201));
     }
 
     private void assertProductMatchesRequest(JsonPath jsonPath, ProductRequest req) {
@@ -53,5 +101,11 @@ public class PostUserTest extends ApiBaseTest {
         assertEquals(req.getCategoryId(), jsonPath.getInt("category.id"));
         assertEquals(req.getImages(), jsonPath.getList("images"));
     }
+
+    private void assertIdMatches(int expectedId,JsonPath json) {
+        assertEquals(expectedId, json.getInt("id"));
+    }
+
+
 
 }
