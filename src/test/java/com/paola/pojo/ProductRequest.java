@@ -4,6 +4,7 @@ import java.util.List;
 
 public class ProductRequest {
 
+    //Ser
 
     private String title;
     private Integer price;

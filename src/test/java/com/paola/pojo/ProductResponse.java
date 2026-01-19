@@ -1,8 +1,13 @@
 package com.paola.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductResponse {
+
+    //Des
 
     private Integer id;
     private String title;
@@ -35,6 +40,7 @@ public class ProductResponse {
         return images;
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Category{
         private Integer id;
         public Integer getId() {

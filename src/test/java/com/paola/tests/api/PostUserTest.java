@@ -1,6 +1,7 @@
 package com.paola.tests.api;
 
 import com.paola.pojo.ProductRequest;
+import com.paola.pojo.ProductResponse;
 import com.paola.utilities.ApiBaseTest;
 import com.paola.utilities.TestDataFactory;
 import com.paola.utilities.assertions.ProductAssertions;
@@ -38,22 +39,22 @@ public class PostUserTest extends ApiBaseTest {
         int id = jsonPath.getInt("id");
         System.out.println(id);
 
-        JsonPath responseJson = given()
+        ProductResponse getResponse = given()
                 .contentType(ContentType.JSON)
                 .pathParam("id", id)
                 .when()
                 .get("/products/{id}")
                 .then()
                 .statusCode(200)
-                .extract().jsonPath();
+                .extract().as(ProductResponse.class);
 
-        ProductAssertions.assertIdMatches(id,responseJson);
+        ProductAssertions.assertIdMatches(id, getResponse);
 
     }
 
     @DisplayName("Validate product without title should Fail")
     @Test
-    public void createProductWithoutTitle_shouldFail(){
+    public void createProductWithoutTitle_shouldFail() {
 
         String body = "{\n" +
                 "  \"title\": \"\",\n" +
@@ -70,12 +71,12 @@ public class PostUserTest extends ApiBaseTest {
                 .post("/products/")
                 .then()
                 .statusCode(not(201))
-                .body("message",notNullValue());
+                .body("message", notNullValue());
     }
 
     @DisplayName("Validate product with negative price should Fail")
     @Test
-    public void createProductWithNegativePrice_shouldFail(){
+    public void createProductWithNegativePrice_shouldFail() {
 
         String body = "{\n" +
                 "  \n" +

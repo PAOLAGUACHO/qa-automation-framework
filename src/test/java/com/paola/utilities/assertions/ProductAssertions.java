@@ -1,6 +1,7 @@
 package com.paola.utilities.assertions;
 
 import com.paola.pojo.ProductRequest;
+import com.paola.pojo.ProductResponse;
 import io.restassured.path.json.JsonPath;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,7 +20,7 @@ public class ProductAssertions {
         assertEquals(req.getImages(), jsonPath.getList("images"));
     }
 
-    public static void assertIdMatches(int expectedId,JsonPath json) {
-        assertEquals(expectedId, json.getInt("id"));
+    public static void assertIdMatches(int expectedId, ProductResponse response) {
+        assertEquals(expectedId, response.getId());
     }
 }

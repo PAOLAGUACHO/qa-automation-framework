@@ -18,6 +18,7 @@ public class GetUsersTest extends ApiBaseTest {
                 .when()
                 .get("/products")
                 .then()
+                .log().all()
                 .statusCode(200)
                 .body("size()", greaterThan(0))
                 .body("[0].id", notNullValue());
