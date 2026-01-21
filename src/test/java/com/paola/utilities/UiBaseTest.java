@@ -4,6 +4,7 @@ import dev.failsafe.internal.util.Durations;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -11,6 +12,7 @@ import java.time.Duration;
 
 import static java.lang.Thread.sleep;
 
+@ExtendWith(ScreenshotOnFailureExtension.class)
 public class UiBaseTest {
 
     protected WebDriverWait wait;
@@ -20,7 +22,6 @@ public class UiBaseTest {
         WebDriver driver = Driver.getDriver();
         driver.get("https://www.google.com/");
     }
-
     @BeforeEach
     public void WebDriverWait_Set_Up(){
          wait= new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));

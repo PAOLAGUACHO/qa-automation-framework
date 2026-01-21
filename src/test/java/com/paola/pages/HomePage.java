@@ -1,11 +1,9 @@
 package com.paola.pages;
 
-import com.paola.utilities.Driver;
 import com.paola.utilities.ElementUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class HomePage {
@@ -16,9 +14,10 @@ public class HomePage {
         this.driver = driver;
     }
 
-    private final String URL = "https://fakeapi.platzi.com/";
+    private final String url = "https://fakeapi.platzi.com/";
+
     public void open() {
-        driver.navigate().to(URL);
+        driver.navigate().to(url);
     }
 
     private By searchButton = By.xpath("//button[@aria-label='Search']");
@@ -33,16 +32,24 @@ public class HomePage {
         return ElementUtils.waitForVisibility(wait, viewDocsLink);
     }
 
-    public boolean isLoaded(){
+    public boolean isSearchButtonVisible(WebDriverWait wait){
+       return getSearchButton(wait).isDisplayed();
+    }
+
+    public boolean isViewDocsLinkVisible(WebDriverWait wait){
+        return getViewDocsLink(wait).isDisplayed();
+    }
+
+    public boolean isLoaded() {
         boolean isTitle = driver.getTitle() != null && driver.getTitle().contains("Platzi");
-        boolean isUrl = driver.getCurrentUrl().contains(URL);
+        boolean isUrl = driver.getCurrentUrl().contains(url);
 
         return isTitle && isUrl;
     }
 
-    public DocsPage goToDocs(WebDriverWait wait){
-         getViewDocsLink(wait).click();
-      return new DocsPage(driver);
+    public DocsPage goToDocs(WebDriverWait wait) {
+        getViewDocsLink(wait).click();
+        return new DocsPage(driver);
     }
 
 }
