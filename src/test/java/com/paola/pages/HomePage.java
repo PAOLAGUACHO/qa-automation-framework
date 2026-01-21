@@ -16,7 +16,6 @@ public class HomePage {
         this.driver = driver;
     }
 
-    //Driver.getDriver().navigate().to("https://fakeapi.platzi.com/");
     private final String URL = "https://fakeapi.platzi.com/";
     public void open() {
         driver.navigate().to(URL);
@@ -25,7 +24,6 @@ public class HomePage {
     private By searchButton = By.xpath("//button[@aria-label='Search']");
 
     private By viewDocsLink = By.linkText("View Docs");
-
 
     public WebElement getSearchButton(WebDriverWait wait) {
         return ElementUtils.waitForVisibility(wait, searchButton);
@@ -40,6 +38,11 @@ public class HomePage {
         boolean isUrl = driver.getCurrentUrl().contains(URL);
 
         return isTitle && isUrl;
+    }
+
+    public DocsPage goToDocs(WebDriverWait wait){
+         getViewDocsLink(wait).click();
+      return new DocsPage(driver);
     }
 
 }
